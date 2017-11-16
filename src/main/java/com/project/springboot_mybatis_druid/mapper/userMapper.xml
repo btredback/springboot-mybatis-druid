@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.springboot_mybatis_druid.dao.UserDao">
+	<!--目的：为Dao接口方法提供SQL语句 -->
+
+	<!--映射实体对象 -->
+	<resultMap id="UserInfo"
+		type="com.project.springboot_mybatis_druid.model.UserInfo">
+		<id property="userId" column="userid" />
+		<result property="userName" column="username" />
+		<result property="userAge" column="userAge" />
+	</resultMap>
+
+
+	<insert id="instertUser">
+		insert into userinfo(userid,username,"userAge")
+		values (#{user.userId},#{user.userName},#{user.userAge})
+	</insert>
+
+	<select id="searchUserByName" resultType="UserInfo">
+		select * 
+		from userinfo
+		where username = #{name}
+	</select>
+	
+	<!-- postgresql 数据库字段名大小写敏感，而当有大写字符时，需要用双引号包含字段名才能正常识别 -->
+	<select id="searchUsersByAge" resultMap="UserInfo">
+		select *
+		from userinfo
+		where "userAge" = #{age}
+	</select>
+
+</mapper>
