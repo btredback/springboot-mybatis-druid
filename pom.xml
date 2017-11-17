@@ -6,6 +6,7 @@
 	<artifactId>springboot-mybatis-druid</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
+	<!-- <packaging>war</packaging> -->
 
 	<name>springboot-mybatis-druid</name>
 	<url>http://maven.apache.org</url>
@@ -16,6 +17,7 @@
 		<java.version>1.7</java.version>
 		<druid.version>1.1.5</druid.version>
 		<spring-boot.version>1.5.6.RELEASE</spring-boot.version>
+		<start-class>com.project.springboot_mybatis_druid.App</start-class>
 	</properties>
 	
 	<!-- spring boot依赖 非parent调用 -->
@@ -34,12 +36,25 @@
 	</dependencyManagement>
 
 	<dependencies>
+		<!-- servlet 编译用  -->
+		<dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
 		<!-- spring boot -->
 		<!-- https://docs.spring.io/spring-boot/docs/1.2.3.RELEASE/reference/html/using-boot-build-systems.html#using-boot-starter-poms -->
 		<!-- spring boot web 包含spring mvc和tomcat-->
 		<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <!-- 打包war时，需要移除嵌入式tomcat插件 -->
+            <!-- <exclusions>
+		        <exclusion>
+		            <groupId>org.springframework.boot</groupId>
+		            <artifactId>spring-boot-starter-tomcat</artifactId>
+		        </exclusion>
+		    </exclusions> -->
         </dependency>
         
         <!-- spring boot 自动配置 -->
@@ -92,6 +107,7 @@
 		    <artifactId>postgresql</artifactId>
 		    <version>9.1-901-1.jdbc4</version>
 		</dependency>
+		
 		<!-- junit -->
 		<!-- <dependency>
 			<groupId>junit</groupId>
@@ -104,6 +120,7 @@
 	<!-- 构建打包maven插件 -->
 	<build>
         <plugins>
+        	<!-- maven构建 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -113,11 +130,62 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
-            <plugin>
+            
+            <!-- 打包jar,只打包源码，不包含依赖jar -->
+            <!-- <plugin>
+            	<groupId>org.apache.maven.plugins</groupId>
+            	<artifactId>maven-jar-plugin</artifactId>
+            	指定main入口文件
+            	<configuration>
+           			<archive>
+           				<manifest>
+           					<addClasspath>true</addClasspath>
+                            <useUniqueVersions>false</useUniqueVersions>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>com.project.springboot_mybatis_druid.App</mainClass>
+           				</manifest>
+           			</archive>
+            	</configuration>
+		            </plugin> -->
+		            
+		    <!-- 打包jar 包含源码+依赖jar-->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>1.5.8.RELEASE</version>
+				<configuration>
+					<mainClass>${start-class}</mainClass>
+					<layout>ZIP</layout>
+					<!-- mvn spring-boot:run执行debug模式 -->
+					<jvmArguments>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005</jvmArguments>       
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<!-- maven打包war -->
+			<!-- <plugin>
+		      <artifactId>maven-war-plugin</artifactId>
+		      <version>2.6</version>
+		      <configuration>
+		        如果想在没有web.xml文件的情况下构建WAR，请设置为false。      
+		        <failOnMissingWebXml>false</failOnMissingWebXml>                        
+		      </configuration>
+		    </plugin> -->
+
+            <!-- maven打包时执行单元测试集成测试 -->
+            <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-            </plugin>
-            <plugin>
+            </plugin> -->
+            
+            <!-- 打包源码 -->
+            <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>
@@ -128,8 +196,10 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
+            </plugin> -->
+            
+            <!-- javadoc -->
+            <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <executions>
@@ -145,20 +215,8 @@
                     <encoding>UTF-8</encoding>
                     <docencoding>UTF-8</docencoding>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+            </plugin> -->
+            
         </plugins>
     </build>
 </project>

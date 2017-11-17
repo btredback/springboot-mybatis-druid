@@ -2,7 +2,7 @@
 
 >  springboot-mybatis-druid整合，使用druid数据源控制，mybatis持久化，springmvc视图
 >
-> 只引入了整合相关依赖包
+>  只引入了整合相关依赖包
 
 - maven
 - springboot
@@ -146,6 +146,10 @@
         </plugins>
     </build>
 </project>
-
 ```
 
+### update
+
+更改build构建，增加打包jar，打包war(已注释)相关依赖。
+
+修改入口App.class，支持打包war。

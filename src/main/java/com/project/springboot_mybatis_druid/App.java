@@ -2,7 +2,9 @@ package com.project.springboot_mybatis_druid;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 /**
  * spring boot app
@@ -11,9 +13,13 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
  */
 @SpringBootApplication
 @ServletComponentScan
-public class App 
-{
-    public static void main( String[] args )
+public class App extends SpringBootServletInitializer {
+    @Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+		return builder.sources(this.getClass());
+	}
+
+	public static void main( String[] args )
     {
     	SpringApplication.run(App.class, args);
     }
