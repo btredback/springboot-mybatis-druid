@@ -48,13 +48,20 @@
 		<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <!-- 打包war时，需要移除嵌入式tomcat插件 -->
-            <!-- <exclusions>
-		        <exclusion>
+            
+            <exclusions>
+            	<!-- 打包war时，需要移除嵌入式tomcat插件 -->
+		        <!-- <exclusion>
 		            <groupId>org.springframework.boot</groupId>
 		            <artifactId>spring-boot-starter-tomcat</artifactId>
+		        </exclusion>-->
+		        <!-- 去除spring-boot-start内的logback依赖使用log4j2 -->
+		        <exclusion>
+		            <groupId>org.springframework.boot</groupId>
+		            <artifactId>spring-boot-starter-logging</artifactId>
 		        </exclusion>
-		    </exclusions> -->
+		    </exclusions> 
+		    
         </dependency>
         
         <!-- spring boot 自动配置 -->
@@ -115,6 +122,21 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency> -->
+		
+		<!-- springboot log4j2 -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-log4j2</artifactId>
+		</dependency>
+		
+		<!-- if no this dependency, then error comes: ClassNotFoundException:org.apache.log4j.Priority! -->  
+		<!-- 好像是由于druid依赖导致的找不到log4j类 -->
+        <dependency>  
+          <groupId>log4j</groupId>  
+          <artifactId>log4j</artifactId>  
+          <version>1.2.12</version>  
+        </dependency>  
+		
 	</dependencies>
 	
 	<!-- 构建打包maven插件 -->
