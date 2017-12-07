@@ -54,6 +54,13 @@
 		<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+          	<exclusions>
+		        <!-- 去除spring-boot-start内的logback依赖使用log4j2 -->
+		        <exclusion>
+		            <groupId>org.springframework.boot</groupId>
+		            <artifactId>spring-boot-starter-logging</artifactId>
+		        </exclusion>
+		    </exclusions> 
         </dependency>
         <!-- springboot 单元测试 -->
         <dependency>
@@ -84,6 +91,19 @@
 		    <artifactId>postgresql</artifactId>
 		    <version>9.1-901-1.jdbc4</version>
 		</dependency>
+      	<!-- springboot log4j2 -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-log4j2</artifactId>
+		</dependency>
+		
+		<!-- if no this dependency, then error comes: 	ClassNotFoundException:org.apache.log4j.Priority! -->  
+		<!-- 好像是由于druid依赖导致的找不到log4j类 -->
+        <dependency>  
+          <groupId>log4j</groupId>  
+          <artifactId>log4j</artifactId>  
+          <version>1.2.12</version>  
+        </dependency>  
 	</dependencies>
   
 	<build>
@@ -153,3 +173,5 @@
 更改build构建，增加打包jar，打包war(已注释)相关依赖。
 
 修改入口App.class，支持打包war。
+
+日志使用log4j2。
